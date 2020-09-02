@@ -9,8 +9,8 @@ use yii\helpers\ArrayHelper;
 
 class D3RuleSettingTypeDictionary{
 
-    private const CACHE_KEY_LIST = 'D3RuleSettingTypeDictionaryList';
-    private const CACHE_KEY_CODES_LIST = 'D3RuleSettingTypeDictionaryCodesList';
+    private const CACHE_KEY_LIST = 'D3RuleSettingTypeDictionaryList1';
+    private const CACHE_KEY_CODES_LIST = 'D3RuleSettingTypeDictionaryCodesList1';
 
     public static function getList(): array
     {

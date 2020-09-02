@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">coalmar_20200504</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="ki_invoice" view="colnames">
+<left>0</left>
+<top>0</top>
+<width>160</width>
+<height>432</height>
+<sql_create_table>CREATE TABLE `ki_invoice` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `sys_company_id` smallint(5) unsigned NOT NULL,
+  `kps_id` int(10) unsigned DEFAULT NULL COMMENT 'KPS ID',
+  `doc_number` char(20) DEFAULT NULL COMMENT 'Number',
+  `type_id` tinyint(3) unsigned NOT NULL COMMENT 'Type',
+  `primary_doc_number` char(20) DEFAULT NULL COMMENT 'Primary DOC',
+  `customer_code` int(11) DEFAULT NULL COMMENT 'CUstomer Code',
+  `date_or_receipt` date DEFAULT NULL COMMENT 'Date of receipt',
+  `dta_of_create` date DEFAULT NULL COMMENT 'Date of creation',
+  `notes` text COMMENT 'Notes',
+  `total_amount` decimal(10,2) DEFAULT NULL COMMENT 'Total Amount',
+  `vat_amount` decimal(10,2) unsigned DEFAULT NULL COMMENT 'VAT Amount',
+  `amount` decimal(10,2) DEFAULT NULL COMMENT 'Amount',
+  `due_date` date DEFAULT NULL COMMENT 'Due Date',
+  `invoice_date` date DEFAULT NULL COMMENT 'Invoice Date',
+  `client_code` int(10) unsigned DEFAULT NULL COMMENT 'Clien Code',
+  `station_code` int(11) DEFAULT NULL COMMENT 'Station Code',
+  `subconot_code` char(10) DEFAULT NULL COMMENT 'Subcont Code',
+  `contract_number` char(20) DEFAULT NULL COMMENT 'Contract Number',
+  PRIMARY KEY (`id`),
+  KEY `type_id` (`type_id`),
+  KEY `id` (`id`,`doc_number`,`invoice_date`),
+  CONSTRAINT `ki_invoice_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `ki_invoice_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1131 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="ki_invoice_type" view="colnames">
+<left>197</left>
+<top>527</top>
+<width>124</width>
+<height>97</height>
+<sql_create_table>CREATE TABLE `ki_invoice_type` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL COMMENT 'Type',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="ki_vpn_wags" view="colnames">
+<left>233</left>
+<top>66</top>
+<width>156</width>
+<height>321</height>
+<sql_create_table>CREATE TABLE `ki_vpn_wags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `calc_vpn_id` int(10) unsigned NOT NULL,
+  `wagnum` int(10) unsigned DEFAULT NULL,
+  `shipment` int(10) unsigned DEFAULT NULL,
+  `axis` tinyint(3) unsigned DEFAULT NULL,
+  `feed_time` datetime DEFAULT NULL,
+  `end_freight_time` datetime DEFAULT NULL,
+  `remove_time` datetime DEFAULT NULL,
+  `downtime_hours` smallint(5) unsigned DEFAULT NULL,
+  `all_downtime_stored` int(10) unsigned DEFAULT NULL,
+  `wag_own_name_id` smallint(5) unsigned DEFAULT NULL,
+  `wag_type_name_id` smallint(5) unsigned DEFAULT NULL,
+  `freight_code` int(10) unsigned DEFAULT NULL,
+  `payment_id` smallint(5) unsigned DEFAULT NULL,
+  `delivery_id` int(10) unsigned DEFAULT NULL,
+  `invoice_id` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `calc_vpn_id` (`calc_vpn_id`),
+  KEY `wag_own_name_id` (`wag_own_name_id`),
+  KEY `wag_type_name_id` (`wag_type_name_id`),
+  KEY `delivery_id` (`delivery_id`),
+  KEY `invoice_id` (`invoice_id`),
+  CONSTRAINT `ki_vpn_wags_ibfk_1` FOREIGN KEY (`calc_vpn_id`) REFERENCES `ki_calc_vpn` (`id`),
+  CONSTRAINT `ki_vpn_wags_ibfk_2` FOREIGN KEY (`wag_own_name_id`) REFERENCES `ki_clasifiers` (`id`),
+  CONSTRAINT `ki_vpn_wags_ibfk_3` FOREIGN KEY (`wag_type_name_id`) REFERENCES `ki_clasifiers` (`id`),
+  CONSTRAINT `ki_vpn_wags_ibfk_4` FOREIGN KEY (`delivery_id`) REFERENCES `cmd_delivery` (`id`),
+  CONSTRAINT `ki_vpn_wags_ibfk_5` FOREIGN KEY (`invoice_id`) REFERENCES `ki_invoice` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6282 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="ki_clasifiers" view="colnames">
+<left>439</left>
+<top>261</top>
+<width>70</width>
+<height>114</height>
+<sql_create_table>CREATE TABLE `ki_clasifiers` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `field` enum('wag_type','wag_owner','doc_name','additional_code','payer_name','tariffname','service_name','stname_out','stname_in','expd_name','carrier_name','account','reg_station_name','bank','std_name') NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="ki_vpn_wags_pay" view="colnames">
+<left>448</left>
+<top>71</top>
+<width>129</width>
+<height>165</height>
+<sql_create_table>CREATE TABLE `ki_vpn_wags_pay` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ki_vpn_wags_id` int(10) unsigned NOT NULL,
+  `sbor_code` tinyint(3) unsigned DEFAULT NULL,
+  `coef` decimal(3,2) unsigned DEFAULT NULL,
+  `sum_no_pvn` decimal(10,2) unsigned DEFAULT NULL,
+  `pvn_name_id` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ki_vpn_wags_id` (`ki_vpn_wags_id`),
+  KEY `pvn_name_id` (`pvn_name_id`),
+  CONSTRAINT `ki_vpn_wags_pay_ibfk_1` FOREIGN KEY (`ki_vpn_wags_id`) REFERENCES `ki_vpn_wags` (`id`),
+  CONSTRAINT `ki_vpn_wags_pay_ibfk_2` FOREIGN KEY (`pvn_name_id`) REFERENCES `ki_pvn` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8032 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="ki_pvn" view="colnames">
+<left>603</left>
+<top>353</top>
+<width>100</width>
+<height>111</height>
+<sql_create_table>CREATE TABLE `ki_pvn` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(10) NOT NULL,
+  `value` decimal(4,2) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="ki_normalised" view="colnames">
+<left>739</left>
+<top>10</top>
+<width>162</width>
+<height>260</height>
+<sql_create_table>CREATE TABLE `ki_normalised` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sys_company_id` smallint(5) unsigned NOT NULL,
+  `invoice_id` smallint(5) unsigned NOT NULL,
+  `code` tinyint(3) unsigned NOT NULL,
+  `wag_num` int(10) unsigned DEFAULT NULL,
+  `amt` float NOT NULL,
+  `vat_name_id` tinyint(3) unsigned DEFAULT NULL,
+  `model_id` tinyint(3) unsigned NOT NULL,
+  `model_record_id` int(10) unsigned NOT NULL,
+  `delivery_id` int(10) unsigned DEFAULT NULL,
+  `cinv_invoice_item_id` int(10) unsigned DEFAULT NULL,
+  `cinv_invoice_id` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invoice_id` (`invoice_id`),
+  KEY `delivery_id` (`delivery_id`),
+  KEY `model_id` (`model_id`),
+  KEY `inv_invoice_id` (`cinv_invoice_id`),
+  KEY `cinv_invoice_item_id` (`cinv_invoice_item_id`),
+  KEY `ki_normalised_ibfk_cinv_invoice_vat` (`vat_name_id`),
+  CONSTRAINT `ki_normalised_ibfk_cinv_invoice` FOREIGN KEY (`cinv_invoice_id`) REFERENCES `cinv_invoice` (`id`),
+  CONSTRAINT `ki_normalised_ibfk_cinv_invoice_item` FOREIGN KEY (`cinv_invoice_item_id`) REFERENCES `cinv_invoice_items` (`id`),
+  CONSTRAINT `ki_normalised_ibfk_cinv_invoice_vat` FOREIGN KEY (`vat_name_id`) REFERENCES `ki_pvn` (`id`),
+  CONSTRAINT `ki_normalised_ibfk_delivery` FOREIGN KEY (`delivery_id`) REFERENCES `cmd_delivery` (`id`),
+  CONSTRAINT `ki_normalised_ibfk_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `ki_invoice` (`id`),
+  CONSTRAINT `ki_normalised_ibfk_sys_model` FOREIGN KEY (`model_id`) REFERENCES `sys_models` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37777 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="sys_models" view="colnames">
+<left>942</left>
+<top>24</top>
+<width>105</width>
+<height>114</height>
+<sql_create_table>CREATE TABLE `sys_models` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `table_name` varchar(256) NOT NULL COMMENT 'Table',
+  `class_name` varchar(256) DEFAULT NULL COMMENT 'Class',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `table_name` (`table_name`,`class_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=ascii</sql_create_table>
+</table>
+<table name="cinv_invoice_items" view="colnames">
+<left>1168</left>
+<top>45</top>
+<width>147</width>
+<height>233</height>
+<sql_create_table>CREATE TABLE `cinv_invoice_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `invoice_id` smallint(5) unsigned NOT NULL,
+  `ref_model_id` tinyint(3) unsigned NOT NULL,
+  `ref_record_id` int(10) unsigned NOT NULL,
+  `description` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
+  `amount` decimal(10,2) unsigned NOT NULL,
+  `vat_id` tinyint(3) unsigned NOT NULL,
+  `full_amt` decimal(10,2) unsigned NOT NULL,
+  `ref2_model_id` tinyint(3) unsigned DEFAULT NULL,
+  `ref2_record_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invoice_id` (`invoice_id`),
+  KEY `vat_id` (`vat_id`),
+  KEY `ref_model_id` (`ref_model_id`,`ref_record_id`,`invoice_id`),
+  KEY `cinv_invoice_items_ibfk_4` (`ref2_model_id`),
+  CONSTRAINT `cinv_invoice_items_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `cinv_invoice` (`id`),
+  CONSTRAINT `cinv_invoice_items_ibfk_2` FOREIGN KEY (`ref_model_id`) REFERENCES `sys_models` (`id`),
+  CONSTRAINT `cinv_invoice_items_ibfk_3` FOREIGN KEY (`vat_id`) REFERENCES `cinv_vat` (`id`),
+  CONSTRAINT `cinv_invoice_items_ibfk_4` FOREIGN KEY (`ref2_model_id`) REFERENCES `sys_models` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34256 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="cinv_invoice" view="colnames">
+<left>933</left>
+<top>328</top>
+<width>144</width>
+<height>182</height>
+<sql_create_table>CREATE TABLE `cinv_invoice` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `sys_company_id` smallint(5) unsigned NOT NULL,
+  `client_company_id` smallint(5) unsigned NOT NULL,
+  `contract_id` smallint(5) unsigned DEFAULT NULL,
+  `date` date NOT NULL,
+  `number` varchar(20) NOT NULL,
+  `status` enum('New','Done') DEFAULT NULL,
+  `notes` text CHARACTER SET utf8,
+  PRIMARY KEY (`id`),
+  KEY `sys_company_id` (`sys_company_id`),
+  KEY `client_company_id` (`client_company_id`),
+  KEY `contract_id` (`contract_id`),
+  CONSTRAINT `cinv_invoice_ibfk_1` FOREIGN KEY (`sys_company_id`) REFERENCES `d3c_company` (`id`),
+  CONSTRAINT `cinv_invoice_ibfk_2` FOREIGN KEY (`client_company_id`) REFERENCES `d3c_company` (`id`),
+  CONSTRAINT `cinv_invoice_ibfk_3` FOREIGN KEY (`contract_id`) REFERENCES `cinv_contract` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="cinv_contract" view="colnames">
+<left>1175</left>
+<top>446</top>
+<width>144</width>
+<height>216</height>
+<sql_create_table>CREATE TABLE `cinv_contract` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `sys_company_id` smallint(5) unsigned NOT NULL,
+  `client_company_id` smallint(5) unsigned NOT NULL,
+  `date` date NOT NULL,
+  `number` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `from` date NOT NULL,
+  `to` date NOT NULL,
+  `status` enum('Active','Finished') DEFAULT NULL,
+  `notes` text CHARACTER SET utf8,
+  PRIMARY KEY (`id`),
+  KEY `sys_company_id` (`sys_company_id`),
+  KEY `client_company_id` (`client_company_id`),
+  CONSTRAINT `cinv_contract_ibfk_1` FOREIGN KEY (`sys_company_id`) REFERENCES `d3c_company` (`id`),
+  CONSTRAINT `cinv_contract_ibfk_2` FOREIGN KEY (`client_company_id`) REFERENCES `d3c_company` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="d3c_company" view="colnames">
+<left>1378</left>
+<top>396</top>
+<width>189</width>
+<height>284</height>
+<sql_create_table>CREATE TABLE `d3c_company` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `regcode` char(30) NOT NULL COMMENT 'Registration number',
+  `sepa` char(20) DEFAULT NULL COMMENT 'VAT',
+  `name` varchar(255) NOT NULL COMMENT 'Name',
+  `legal_type` enum('Juridical person','Natural person') NOT NULL DEFAULT 'Juridical person' COMMENT 'Legal Type',
+  `type_id` smallint(5) unsigned DEFAULT NULL COMMENT 'Type',
+  `country_id` tinyint(3) unsigned DEFAULT NULL COMMENT 'Country',
+  `address` varchar(255) DEFAULT NULL COMMENT 'Address',
+  `office_address` text COMMENT 'Office Address',
+  `status` enum('PARTNER','AUTH','CLOSED') DEFAULT NULL COMMENT 'Status',
+  `reg_partnet_company_id` smallint(5) unsigned DEFAULT NULL COMMENT 'RegistredPartner',
+  `comunication_language_id` tinyint(3) unsigned DEFAULT NULL COMMENT 'Comunication language',
+  `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  PRIMARY KEY (`id`),
+  KEY `reg_partnet_company_id` (`reg_partnet_company_id`),
+  KEY `type_id` (`type_id`),
+  KEY `country_id` (`country_id`),
+  KEY `d3c_company_ibfk_comLang` (`comunication_language_id`),
+  KEY `status` (`status`),
+  CONSTRAINT `d3c_company_ibfk_1` FOREIGN KEY (`reg_partnet_company_id`) REFERENCES `d3c_company` (`id`),
+  CONSTRAINT `d3c_company_ibfk_2` FOREIGN KEY (`country_id`) REFERENCES `cl_countries` (`id`),
+  CONSTRAINT `d3c_company_ibfk_comLang` FOREIGN KEY (`comunication_language_id`) REFERENCES `cl_language` (`id`),
+  CONSTRAINT `d3c_company_ibfk_type` FOREIGN KEY (`type_id`) REFERENCES `d3c_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
