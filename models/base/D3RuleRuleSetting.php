@@ -4,6 +4,7 @@
 
 namespace d3yii2\d3rules\models\base;
 
+use d3yii2\d3rules\dictionaries\D3RuleSettingTypeDictionary;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -57,7 +58,7 @@ abstract class D3RuleRuleSetting extends ActiveRecord
             'smallint Unsigned' => [['id','rule_id'],'integer' ,'min' => 0 ,'max' => 65535],
             [['value'], 'string', 'max' => 255],
             [['rule_id'], 'exist', 'skipOnError' => true, 'targetClass' => \d3yii2\d3rules\models\D3ruleRule::className(), 'targetAttribute' => ['rule_id' => 'id']],
-            [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => \d3yii2\d3rules\models\D3ruleSettingType::className(), 'targetAttribute' => ['type_id' => 'id']]
+            [['type_id'], 'in', 'range' => array_keys(D3RuleSettingTypeDictionary::getList())]
         ];
     }
 

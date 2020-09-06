@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemadesigner version="6.5">
 <source>
-<database charset="latin1" collation="latin1_swedish_ci">coalmar_20200504</database>
+<database charset="latin1" collation="latin1_swedish_ci">coalmar_20200902</database>
 </source>
 <canvas zoom="100">
 <tables>
@@ -21,7 +21,7 @@
   KEY `model_id` (`model_id`),
   CONSTRAINT `d3rule_rule_ibfk_2` FOREIGN KEY (`rule_class_id`) REFERENCES `sys_models` (`id`),
   CONSTRAINT `d3rule_rule_ibfk_3` FOREIGN KEY (`model_id`) REFERENCES `sys_models` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1</sql_create_table>
 </table>
 <table name="d3rule_rule_setting" view="colnames">
 <left>287</left>
@@ -38,11 +38,11 @@
   KEY `type_id` (`type_id`),
   CONSTRAINT `d3rule_rule_setting_ibfk_1` FOREIGN KEY (`rule_id`) REFERENCES `d3rule_rule` (`id`),
   CONSTRAINT `d3rule_rule_setting_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `d3rule_setting_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
 </table>
 <table name="d3rule_setting_type" view="colnames">
 <left>501</left>
-<top>175</top>
+<top>238</top>
 <width>184</width>
 <height>114</height>
 <sql_create_table>CREATE TABLE `d3rule_setting_type` (
@@ -53,11 +53,11 @@
   PRIMARY KEY (`id`),
   KEY `dict_class_id` (`dict_class_id`),
   CONSTRAINT `d3rule_setting_type_ibfk_1` FOREIGN KEY (`dict_class_id`) REFERENCES `sys_models` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
 </table>
 <table name="sys_models" view="colnames">
-<left>752</left>
-<top>310</top>
+<left>286</left>
+<top>329</top>
 <width>169</width>
 <height>114</height>
 <sql_create_table>CREATE TABLE `sys_models` (

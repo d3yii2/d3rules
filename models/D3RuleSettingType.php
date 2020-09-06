@@ -2,8 +2,9 @@
 
 namespace d3yii2\d3rules\models;
 
+use d3yii2\d3rules\dictionaries\D3RuleSettingTypeDictionary;
 use \d3yii2\d3rules\models\base\D3RuleSettingType as BaseD3RuleSettingType;
-use d3yii2\d3store\dictionaries\D3RuleSettingTypeDictionary;
+
 
 /**
  * This is the model class for table "d3rule_setting_type".
