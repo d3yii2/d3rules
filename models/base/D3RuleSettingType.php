@@ -79,7 +79,7 @@ abstract class D3RuleSettingType extends ActiveRecord
      */
     public function getD3ruleRuleSettings()
     {
-        return $this->hasMany(\d3yii2\d3rules\models\D3ruleRuleSetting::className(), ['type_id' => 'id']);
+        return $this->hasMany(\d3yii2\d3rules\models\D3RuleRuleSetting::className(), ['type_id' => 'id']);
     }
 
     /**
