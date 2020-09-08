@@ -8,5 +8,5 @@ interface RuleModelInterface
 {
     public static function getRuleName();
     public static function createDefaultSettings(int $ruleId);
-    public function filterQuery();
+    public function filterQuery($query);
 }
