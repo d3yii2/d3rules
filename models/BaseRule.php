@@ -15,7 +15,9 @@ class BaseRule extends D3RuleRule
         $list = D3RuleSettingTypeDictionary::getCodeList();
         foreach($this->d3ruleRuleSettings as $setting){
             $settingCode = $list[$setting->type_id];
-            $this->$settingCode = $setting;
+            if(property_exists($this, $settingCode)) {
+                $this->$settingCode = $setting;
+            }
         }
     }
 

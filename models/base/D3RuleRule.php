@@ -27,9 +27,6 @@ use yii\db\ActiveRecord;
  */
 abstract class D3RuleRule extends ActiveRecord
 {
-
-
-
     /**
      * @inheritdoc
      */
@@ -37,18 +34,6 @@ abstract class D3RuleRule extends ActiveRecord
     {
         return 'd3rule_rule';
     }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        $behaviors = [
-        ];
-        return $behaviors;
-    }
-
 
     /**
      * @inheritdoc
