@@ -24,7 +24,6 @@ class D3RuleRule extends BaseD3RuleRule
         }
         if($isNewRecord){
             $ruleClassName = SysModelsDictionary::getClassList()[$this->rule_class_id];
-            $ruleClassName::createDefaultSettings($this->id);
         }
 
         return true;
